@@ -4,20 +4,53 @@ import { SheetService } from './sheet.service';
 declare let global: any;
 
 global.searchContactMail = (): void => {
-  const lineNotifyAccessToken = PropertiesService.getScriptProperties().getProperty(
-    'LINE_NOTIFY_ACCESS_TOKEN'
-  );
+  // const query = '"label:ゴミカレンダー"';
+  const query = '"53cal-sender@53cal.jp"';
 
-  Logger.log('lineNotifyAccessToken:' + lineNotifyAccessToken);
-
-  const query = '"清水地区"';
   const start = 0;
-  const max = 10;
+  const max = 1;
 
   const threads = GmailApp.search(query, start, max);
   const messagesForThreads = GmailApp.getMessagesForThreads(threads);
 
-  for (const messages of messagesForThreads) {
-    console.log(messages[0].getSubject());
+  if (messagesForThreads.length == 0) {
+    return;
   }
+
+  const message = messagesForThreads[0][0];
+
+  const messageBody = message.getPlainBody();
+
+  const matchMessageBody = messageBody.match(/.*です/);
+  const Chart = messageBody.match(/.*areacalendar.*/);
+
+  //メールの削除
+  message.moveToTrash();
+
+  const lineNotifyAccessToken = PropertiesService.getScriptProperties().getProperty(
+    'LINE_NOTIFY_ACCESS_TOKEN'
+  );
+
+  const url = 'https://notify-api.line.me/api/notify';
+  const data = {
+    message:
+      '\n' +
+      matchMessageBody +
+      '\n' +
+      '一覧\n' +
+      Chart +
+      '\n\n' +
+      '清水地区のカレンダー(公式)\n' +
+      'https://www.city.matsuyama.ehime.jp/kurashi/gomi/dashikata/gomicalender/2020gomikaretikubetu.files/2020.shimizu.pdf',
+  };
+  const options: any = {
+    method: 'post',
+    contentType: 'application/x-www-form-urlencoded',
+    headers: {
+      Authorization: 'Bearer ' + lineNotifyAccessToken,
+    },
+    payload: data,
+  };
+
+  UrlFetchApp.fetch(url, options);
 };
