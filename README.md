@@ -12,3 +12,10 @@ GASのスクリプトプロパティに保存しておく
 
 ### テンプレートをインストール
 `git clone --depth=1 https://github.com/howdy39/gas-clasp-starter.git garbage-notification-from-gmail`
+
+### 依存ライブラリをインストール
+```
+cd template
+npm install
+```
+
