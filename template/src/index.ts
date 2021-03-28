@@ -40,8 +40,8 @@ global.searchContactMail = (): void => {
       '一覧\n' +
       Chart +
       '\n\n' +
-      '清水地区のカレンダー(公式)\n' +
-      'https://www.city.matsuyama.ehime.jp/kurashi/gomi/dashikata/gomicalender/2020gomikaretikubetu.files/2020.shimizu.pdf',
+      '東野地区のカレンダー(公式)\n' +
+      'http://www.53cal.jp/areacalendar/?city=1380101&area=1380101430',
   };
   const options: any = {
     method: 'post',
