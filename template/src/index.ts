@@ -5,7 +5,7 @@ declare let global: any;
 
 global.searchContactMail = (): void => {
   // const query = '"label:ゴミカレンダー"';
-  const query = '"53cal-sender@53cal.jp"';
+  const query = '"info@matsuyama.gomi.today"';
 
   const start = 0;
   const max = 1;
@@ -21,8 +21,11 @@ global.searchContactMail = (): void => {
 
   const messageBody = message.getPlainBody();
 
-  const matchMessageBody = messageBody.match(/.*です/);
-  const Chart = messageBody.match(/.*areacalendar.*/);
+  const matchMessageBody = messageBody.match(/明日、[\s\S]*となります/)[0];
+
+  if (matchMessageBody.indexOf('Uncollect') || matchMessageBody.indexOf('未回収日')) {
+    return;
+  }
 
   //メールの削除
   message.moveToTrash();
@@ -33,15 +36,7 @@ global.searchContactMail = (): void => {
 
   const url = 'https://notify-api.line.me/api/notify';
   const data = {
-    message:
-      '\n' +
-      matchMessageBody +
-      '\n' +
-      '一覧\n' +
-      Chart +
-      '\n\n' +
-      '東野地区のカレンダー(公式)\n' +
-      'http://www.53cal.jp/areacalendar/?city=1380101&area=1380101430',
+    message: matchMessageBody,
   };
   const options: any = {
     method: 'post',
