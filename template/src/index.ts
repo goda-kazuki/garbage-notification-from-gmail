@@ -23,7 +23,7 @@ global.searchContactMail = (): void => {
 
   const matchMessageBody = messageBody.match(/明日、[\s\S]*となります/)[0];
 
-  if (matchMessageBody.indexOf('Uncollect') || matchMessageBody.indexOf('未回収日')) {
+  if (matchMessageBody.match(/Uncollect/) || matchMessageBody.match(/未回収日/)) {
     return;
   }
 
