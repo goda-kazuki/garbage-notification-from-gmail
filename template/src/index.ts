@@ -1,4 +1,4 @@
-import { SheetService } from './sheet.service';
+import {SheetService} from './sheet.service';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare let global: any;
@@ -23,12 +23,12 @@ global.searchContactMail = (): void => {
 
   const matchMessageBody = messageBody.match(/明日、[\s\S]*となります/)[0];
 
+  //メールの削除
+  message.moveToTrash();
+
   if (matchMessageBody.match(/Uncollect/) || matchMessageBody.match(/未回収日/)) {
     return;
   }
-
-  //メールの削除
-  message.moveToTrash();
 
   const lineNotifyAccessToken = PropertiesService.getScriptProperties().getProperty(
     'LINE_NOTIFY_ACCESS_TOKEN'
